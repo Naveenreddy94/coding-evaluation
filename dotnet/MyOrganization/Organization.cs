@@ -26,9 +26,32 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            Position position = FindPosition(title, root);
+            if (position != null && !position.IsFilled())
+            {
+                position.SetEmployee(new Employee(person));
+                return position;
+            }
             return null;
         }
+
+        private Position FindPosition(string title, Position node)
+        {
+            if (node.GetTitle() == title)
+            {
+                return node;
+            }
+            foreach (Position directReport in node.GetDirectReports())
+            {
+                Position found = FindPosition(title, directReport);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+            return null;
+        }
+
 
         override public string ToString()
         {
